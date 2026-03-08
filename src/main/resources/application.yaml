@@ -1,3 +1,14 @@
+server:
+  port: 8082
+
 spring:
   application:
     name: report-service
+
+account-service:
+  base-url: http://localhost:8080/
+  get-account: /account/{id}
+
+transaction-service:
+  base-url: http://localhost:8081/
+  get-transaction: /transaction/{id}
