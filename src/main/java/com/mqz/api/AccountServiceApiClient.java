@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
@@ -18,14 +19,13 @@ public class AccountServiceApiClient {
 
     private final WebClient accountServiceWebClient;
 
-    public AccountResponse getAccountById(Long id) {
+    public Mono<AccountResponse> getAccountById(Long id) {
         logger.info("[AccountServiceApiClient.getAccountById] Getting Account ID: {} from Account Service", id);
         return accountServiceWebClient
                 .get()
                 .uri(accountServiceConfiguration.getGetAccount(), id)
                 .retrieve()
-                .bodyToMono(AccountResponse.class)
-                .block();
+                .bodyToMono(AccountResponse.class);
     }
 
 }

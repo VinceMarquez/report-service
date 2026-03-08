@@ -1,6 +1,6 @@
 package com.mqz.controller;
 
-import com.mqz.dto.response.AccountResponse;
+import com.mqz.dto.response.ReportResponse;
 import com.mqz.service.ReportService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,10 +20,11 @@ public class ReportController {
     private final ReportService reportService;
 
     @GetMapping("/report")
-    public ResponseEntity<AccountResponse> getAccountSingleTransaction(@RequestParam("accountId") Long accountId,
-                                                                       @RequestParam("transactionId") Long transactionId) {
+    public Mono<ResponseEntity<ReportResponse>> getAccountSingleTransaction(@RequestParam("accountId") Long accountId,
+                                                                            @RequestParam("transactionId") Long transactionId) {
         logger.info("Received getAccountSingleTransaction request with Params: [accountId = {}, transactionId = {}", accountId, transactionId);
-        return ResponseEntity.ok(reportService.getAccountSingleTransaction(accountId, transactionId));
+        return reportService.getAccountSingleTransaction(accountId, transactionId)
+                .map(ResponseEntity::ok);
     }
 
 }
